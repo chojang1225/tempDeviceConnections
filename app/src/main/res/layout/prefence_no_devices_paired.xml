@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true">
+
+    <TextView android:id="@+id/no_devices"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/no_devices_paired"
+        android:textSize="26sp" />
+
+    <TextView android:id="@+id/to_pair"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/no_devices"
+        android:layout_marginTop="13dp"
+        android:text="@string/to_pair"
+        android:textSize="24sp"
+        android:alpha="0.7"/>
+
+</RelativeLayout>

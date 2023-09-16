@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:appns="http://schemas.android.com/apk/res-auto">
+
+    <androidx.preference.PreferenceCategory
+        android:layout="@layout/device_connections_title">
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        android:key="show_category">
+        <androidx.preference.Preference
+            android:layout="@layout/prefence_no_devices_paired"
+            android:key="no_devices"/>
+
+        <com.example.tempdeviceconnection.common.ButtonPreference
+            android:layout="@layout/preference_add_new"
+            android:key="add_new"/>
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        android:key="device_paired">
+        <androidx.preference.Preference
+            android:layout="@layout/preference_device_list"/>
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        android:title="@string/bluetooth_system_info"
+        android:layout="@layout/preference_title">
+
+        <androidx.preference.EditTextPreference
+            android:key="key_edit_text"
+            android:title="@string/vehicle_name_title"
+            android:summary="tci_one"
+            appns:useSimpleSummaryProvider="true"
+            android:defaultValue="tci_one"
+            android:layout="@layout/preference_vehicle_name"/>
+
+    </androidx.preference.PreferenceCategory>
+
+
+
+    <androidx.preference.PreferenceCategory
+        android:title="@string/phone_projection_title"
+        android:layout="@layout/preference_title">
+
+    </androidx.preference.PreferenceCategory>
+
+
+
+
+</androidx.preference.PreferenceScreen>

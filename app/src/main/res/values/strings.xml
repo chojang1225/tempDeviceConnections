@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">TempDeviceConnection</string>
+    <string name="device_connections">Device Connections</string>
+    <string name="no_devices_paired">No Devices Paired</string>
+    <string name="add_new">Add New</string>
+    <string name="bluetooth_system_info">Bluetooth System Info</string>
+    <string name="vehicle_name_title">Vehicle Name</string>
+    <string name="to_pair">To Pair a new device, press the [Add New] button below.</string>
+    <string name="phone_projection_title">Phone Projection</string>
+    <string name="android_auto_settings">Android Auto Settings</string>
+    <string name="carplay_settings">Apple CarPlay Settings</string>
+
+    <string name="popup_activity">팝업 액티비티</string>
+    <string name="alert_dialog">Alert 다이얼로그</string>
+    <string name="custom_dialog">커스텀 다이얼로그</string>
+    <string name="make_broadcast">브로드캐스트 생성</string>
+    <string name="add_new_device">Add New Device</string>
+    <string name="pair">Pair</string>
+    <string name="cancel">Cancel</string>
+    <string name="pairing">Add New Device</string>
+    <string name="pairing_device">Device Name:</string>
+    <string name="vehicle_name">Vehicle Name:</string>
+    <string name="pairing_key">Passkey:</string>
+    <string name="pairing_request">Please check that the Passkey has been entered correctly on the mobile device and then choose [Pair].</string>
+    <string name="add_new_request">In the Bluetooth device, search for the Vehicle Name shown and pair.</string>
+
+</resources>

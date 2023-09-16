@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="1315dp"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/add_new"
+        android:text="@string/add_new"
+        android:layout_width="273dp"
+        android:layout_height="74dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="33dp"
+        android:layout_marginLeft="440dp"
+        android:backgroundTint="#3EAD8C"
+        android:textColor="#FFFFFF"
+        android:textSize="26sp" />
+
+</LinearLayout>
