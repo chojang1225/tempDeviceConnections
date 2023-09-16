@@ -29,24 +29,6 @@ public class MainActivity extends AppCompatActivity implements OnListTiemSelecte
     }
 
 
-//    public static class SettingsFragment extends PreferenceFragmentCompat {
-//        @Override
-//        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-//            setPreferencesFromResource(R.xml.preference_detail, rootKey);
-//
-//            EditTextPreference editTextPreference = findPreference("edit_text_preference");
-//            editTextPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-//                @Override
-//                public boolean onPreferenceChange(Preference preference, Object newValue) {
-//                    SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(requireContext()).edit();
-//                    editor.putString("edit_text_preference", (String) newValue);
-//                    editor.apply();
-//                    return true;
-//                }
-//            });
-//        }
-//    }
-
 
     @Override
     public void onListItemSelected(int position) {
