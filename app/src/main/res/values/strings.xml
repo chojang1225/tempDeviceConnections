@@ -23,5 +23,7 @@
     <string name="pairing_key">Passkey:</string>
     <string name="pairing_request">Please check that the Passkey has been entered correctly on the mobile device and then choose [Pair].</string>
     <string name="add_new_request">In the Bluetooth device, search for the Vehicle Name shown and pair.</string>
+    <string name="delete_devices">Delete Device(s)</string>
+
 
 </resources>

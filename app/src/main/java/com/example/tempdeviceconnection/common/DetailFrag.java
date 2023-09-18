@@ -50,6 +50,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
 
         Preference preference_no_device = findPreference("show_category");
         Preference preference_device_paired = findPreference("device_paired");
+        Preference preference_add_new_delete_devices = findPreference("addnew_delete");
 
         EditTextPreference vehicleName = getPreferenceManager().findPreference("key_edit_text");
 
@@ -78,9 +79,11 @@ public class DetailFrag extends PreferenceFragmentCompat {
         if (pairedDevices != null && !pairedDevices.isEmpty()) {
             preference_no_device.setVisible(false);
             preference_device_paired.setVisible(true);
+            preference_add_new_delete_devices.setVisible(true);
         } else {
             preference_no_device.setVisible(true);
             preference_device_paired.setVisible(false);
+            preference_add_new_delete_devices.setVisible(false);
         }
 
 
@@ -121,6 +124,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
             Log.d("chojang", "action ----------> "+ action);
             Preference preference_no_device = findPreference("show_category");
             Preference preference_device_paired = findPreference("device_paired");
+            Preference preference_add_new_delete_devices = findPreference("addnew_delete");
 
             if(preference_no_device == null) {return;}
 
@@ -130,6 +134,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
 
                 preference_no_device.setVisible(false);
                 preference_device_paired.setVisible(true);
+                preference_add_new_delete_devices.setVisible(true);
 
             } else if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)
                     && (intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.ERROR) == BluetoothDevice.BOND_NONE)) {
@@ -137,6 +142,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
 
                 preference_no_device.setVisible(true);
                 preference_device_paired.setVisible(false);
+                preference_add_new_delete_devices.setVisible(false);
             }
         }
     };

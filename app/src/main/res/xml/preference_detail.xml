@@ -25,6 +25,12 @@
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
+        android:key="addnew_delete">
+        <androidx.preference.Preference
+            android:layout="@layout/preference_add_new_delete_devices"/>
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
         android:title="@string/bluetooth_system_info"
         android:layout="@layout/preference_title">
 
