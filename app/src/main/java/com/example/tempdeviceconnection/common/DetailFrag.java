@@ -89,7 +89,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
         PreferenceScreen preferenceScreen = this.getPreferenceScreen();
         //PreferenceCategory preferenceCategory = new PreferenceCategory(preferenceScreen.getContext());
 
-        for(int i=0; i<1; i++) {
+        for(int i=0; i<2; i++) {
             Preference pref = preferenceScreen.findPreference("device_0"+i);
             if(i<_pairedNumber) {
                 pref.setVisible(true);
