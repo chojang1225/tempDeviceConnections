@@ -55,7 +55,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
         ButtonPreference buttonPreference = findPreference("add_new");
 
         Preference preference_no_device = findPreference("show_category");
-        Preference preference_device_paired = findPreference("device_paired");
+        //Preference preference_device_paired = findPreference("device_paired");
         Preference preference_add_new_delete_devices = findPreference("addnew_delete");
 
         EditTextPreference vehicleName = getPreferenceManager().findPreference("key_edit_text");
@@ -76,13 +76,27 @@ public class DetailFrag extends PreferenceFragmentCompat {
 
         if (pairedDevices != null && !pairedDevices.isEmpty()) {
             preference_no_device.setVisible(false);
-            preference_device_paired.setVisible(true);
+            //preference_device_paired.setVisible(true);
+            preference_add_new_delete_devices.setVisible(true);
 
 
         } else {
             preference_no_device.setVisible(true);
-            preference_device_paired.setVisible(false);
+            //preference_device_paired.setVisible(false);
             preference_add_new_delete_devices.setVisible(false);
+        }
+
+        PreferenceScreen preferenceScreen = this.getPreferenceScreen();
+        //PreferenceCategory preferenceCategory = new PreferenceCategory(preferenceScreen.getContext());
+
+        for(int i=0; i<1; i++) {
+            Preference pref = preferenceScreen.findPreference("device_0"+i);
+            if(i<_pairedNumber) {
+                pref.setVisible(true);
+                pref.setTitle(pairedDevices.toString());
+            } else {
+                pref.setVisible(false);
+            }
         }
 
         vehicleName.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
@@ -142,7 +156,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
             String action = intent.getAction();
             Log.d("chojang", "action ----------> " + action);
             Preference preference_no_device = findPreference("show_category");
-            Preference preference_device_paired = findPreference("device_paired");
+            //Preference preference_device_paired = findPreference("device_paired");
             Preference preference_add_new_delete_devices = findPreference("addnew_delete");
 
             if (preference_no_device == null) {
@@ -154,7 +168,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
                 Log.d("chojang", "paired successfully!!!");
 
                 preference_no_device.setVisible(false);
-                preference_device_paired.setVisible(true);
+                //preference_device_paired.setVisible(true);
                 preference_add_new_delete_devices.setVisible(true);
 
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
@@ -173,7 +187,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
                 if (deviceName != null) {
                     Log.d("chojang", "deviceName=" + deviceName);
 
-                    PreferenceCategory preferenceCategory = findPreference("device_paired");
+                    //PreferenceCategory preferenceCategory = findPreference("device_paired");
 
                     // TODO: 기기명 얻어와서 설정하기
 
@@ -181,12 +195,13 @@ public class DetailFrag extends PreferenceFragmentCompat {
                     }
 
 
+
             } else if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)
                     && (intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.ERROR) == BluetoothDevice.BOND_NONE)) {
                 Log.d("chojang", "unpaired !!!");
 
                 preference_no_device.setVisible(true);
-                preference_device_paired.setVisible(false);
+                //preference_device_paired.setVisible(false);
                 preference_add_new_delete_devices.setVisible(false);
             }
         }
