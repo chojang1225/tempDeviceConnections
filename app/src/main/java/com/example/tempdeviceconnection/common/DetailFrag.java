@@ -20,11 +20,15 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
+import androidx.preference.PreferenceScreen;
 
 import com.example.tempdeviceconnection.R;
 import com.example.tempdeviceconnection.dialog.AddNewDeviceDialog;
+
+import org.w3c.dom.Text;
 
 import java.util.Set;
 
@@ -35,6 +39,8 @@ public class DetailFrag extends PreferenceFragmentCompat {
     public static final String ACTION_BOND_STATE_CHANGED = "android.bluetooth.device.action.BOND_STATE_CHANGED";
 
     private PairingReceiver pairingReceiver;
+
+    static int _pairedNumber;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -53,6 +59,31 @@ public class DetailFrag extends PreferenceFragmentCompat {
         Preference preference_add_new_delete_devices = findPreference("addnew_delete");
 
         EditTextPreference vehicleName = getPreferenceManager().findPreference("key_edit_text");
+
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+        _pairedNumber = pairedDevices.size();
+        Log.d("chojang", "size: " + _pairedNumber);
+
+        if (pairedDevices != null && !pairedDevices.isEmpty()) {
+            preference_no_device.setVisible(false);
+            preference_device_paired.setVisible(true);
+
+
+        } else {
+            preference_no_device.setVisible(true);
+            preference_device_paired.setVisible(false);
+            preference_add_new_delete_devices.setVisible(false);
+        }
 
         vehicleName.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
             @Override
@@ -74,18 +105,6 @@ public class DetailFrag extends PreferenceFragmentCompat {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
-
-        if (pairedDevices != null && !pairedDevices.isEmpty()) {
-            preference_no_device.setVisible(false);
-            preference_device_paired.setVisible(true);
-            preference_add_new_delete_devices.setVisible(true);
-        } else {
-            preference_no_device.setVisible(true);
-            preference_device_paired.setVisible(false);
-            preference_add_new_delete_devices.setVisible(false);
-        }
-
 
         buttonPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -97,7 +116,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
         });
     }
 
-/////////////////////////////////////////////
+    /////////////////////////////////////////////
     @Override
     public void onResume() {
         super.onResume();
@@ -117,16 +136,18 @@ public class DetailFrag extends PreferenceFragmentCompat {
     }
 
     ////////////////////////////////////
-         private class PairingReceiver extends BroadcastReceiver {
+    private class PairingReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            Log.d("chojang", "action ----------> "+ action);
+            Log.d("chojang", "action ----------> " + action);
             Preference preference_no_device = findPreference("show_category");
             Preference preference_device_paired = findPreference("device_paired");
             Preference preference_add_new_delete_devices = findPreference("addnew_delete");
 
-            if(preference_no_device == null) {return;}
+            if (preference_no_device == null) {
+                return;
+            }
 
             if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)
                     && (intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.ERROR) == BluetoothDevice.BOND_BONDED)) {
@@ -135,6 +156,30 @@ public class DetailFrag extends PreferenceFragmentCompat {
                 preference_no_device.setVisible(false);
                 preference_device_paired.setVisible(true);
                 preference_add_new_delete_devices.setVisible(true);
+
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                String deviceName = device.getName();
+
+                if (deviceName != null) {
+                    Log.d("chojang", "deviceName=" + deviceName);
+
+                    PreferenceCategory preferenceCategory = findPreference("device_paired");
+
+                    // TODO: 기기명 얻어와서 설정하기
+
+
+                    }
+
 
             } else if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)
                     && (intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.ERROR) == BluetoothDevice.BOND_NONE)) {
