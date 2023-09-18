@@ -40,7 +40,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
 
     private PairingReceiver pairingReceiver;
 
-    static int _pairedNumber;
+    private int pairedNumber;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -71,8 +71,8 @@ public class DetailFrag extends PreferenceFragmentCompat {
             return;
         }
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
-        _pairedNumber = pairedDevices.size();
-        Log.d("chojang", "size: " + _pairedNumber);
+        pairedNumber = pairedDevices.size();
+        Log.d("chojang", "size: " + pairedNumber);
 
         if (pairedDevices != null && !pairedDevices.isEmpty()) {
             preference_no_device.setVisible(false);
@@ -86,16 +86,18 @@ public class DetailFrag extends PreferenceFragmentCompat {
             preference_add_new_delete_devices.setVisible(false);
         }
 
-        PreferenceScreen preferenceScreen = this.getPreferenceScreen();
+        //PreferenceScreen preferenceScreen = this.getPreferenceScreen();
         //PreferenceCategory preferenceCategory = new PreferenceCategory(preferenceScreen.getContext());
 
         for(int i=0; i<2; i++) {
-            Preference pref = preferenceScreen.findPreference("device_0"+i);
-            if(i<_pairedNumber) {
-                pref.setVisible(true);
-                pref.setTitle(pairedDevices.toString());
-            } else {
-                pref.setVisible(false);
+            Preference pref = findPreference("device_0"+i);
+            if(pref!=null) {
+                if (i < pairedNumber) {
+                    pref.setVisible(true);
+                    //pref.setTitle(pairedDevices.toString());
+                } else {
+                    pref.setVisible(false);
+                }
             }
         }
 
@@ -194,6 +196,19 @@ public class DetailFrag extends PreferenceFragmentCompat {
 
                     }
 
+//                if(pairedNumber >1) {
+//                    for (int i = 0; i < 2; i++) {
+//                        Preference pref = findPreference("device_0" + i);
+//                        if (pref != null) {
+//                            if (i < pairedNumber) {
+//                                pref.setVisible(true);
+//                                //pref.setTitle(pairedDevices.toString());
+//                            } else {
+//                                pref.setVisible(false);
+//                            }
+//                        }
+//                    }
+//                }
 
 
             } else if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)

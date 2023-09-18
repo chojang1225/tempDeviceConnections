@@ -26,10 +26,10 @@
 
     <androidx.preference.Preference
         android:key="device_00"
-        android:layout="@layout/preference_add_new_delete_devices"/>
+        android:layout="@layout/preference_device_list"/>
     <androidx.preference.Preference
         android:key="device_01"
-        android:layout="@layout/preference_add_new_delete_devices"/>
+        android:layout="@layout/preference_device_list"/>
 
     <androidx.preference.PreferenceCategory
         android:key="addnew_delete">
