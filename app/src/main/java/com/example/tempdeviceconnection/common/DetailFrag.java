@@ -89,17 +89,19 @@ public class DetailFrag extends PreferenceFragmentCompat {
         //PreferenceScreen preferenceScreen = this.getPreferenceScreen();
         //PreferenceCategory preferenceCategory = new PreferenceCategory(preferenceScreen.getContext());
 
-        for(int i=0; i<2; i++) {
-            Preference pref = findPreference("device_0"+i);
-            if(pref!=null) {
-                if (i < pairedNumber) {
-                    pref.setVisible(true);
-                    //pref.setTitle(pairedDevices.toString());
-                } else {
-                    pref.setVisible(false);
-                }
-            }
-        }
+//        for(int i=0; i<2; i++) {
+//            Preference pref = findPreference("device_0"+i);
+//            if(pref!=null) {
+//                if (i < pairedNumber) {
+//                    pref.setVisible(true);
+//                    //pref.setTitle(pairedDevices.toString());
+//                } else {
+//                    pref.setVisible(false);
+//                }
+//            }
+//        }
+
+        checkBondedDevice();
 
         vehicleName.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
             @Override
@@ -151,6 +153,35 @@ public class DetailFrag extends PreferenceFragmentCompat {
         this.startActivity(intent);
     }
 
+    private void checkBondedDevice() {
+
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+        pairedNumber = pairedDevices.size();
+
+        for (int i = 0; i < 2; i++) {
+            Preference pref = findPreference("device_0" + i);
+            if (pref != null) {
+                if (i < pairedNumber) {
+                    pref.setVisible(true);
+                } else {
+                    pref.setVisible(false);
+                }
+            }
+        }
+    }
+
+
     ////////////////////////////////////
     private class PairingReceiver extends BroadcastReceiver {
         @Override
@@ -196,20 +227,8 @@ public class DetailFrag extends PreferenceFragmentCompat {
 
                     }
 
-//                if(pairedNumber >1) {
-//                    for (int i = 0; i < 2; i++) {
-//                        Preference pref = findPreference("device_0" + i);
-//                        if (pref != null) {
-//                            if (i < pairedNumber) {
-//                                pref.setVisible(true);
-//                                //pref.setTitle(pairedDevices.toString());
-//                            } else {
-//                                pref.setVisible(false);
-//                            }
-//                        }
-//                    }
-//                }
 
+                checkBondedDevice();
 
             } else if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)
                     && (intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.ERROR) == BluetoothDevice.BOND_NONE)) {
@@ -218,10 +237,14 @@ public class DetailFrag extends PreferenceFragmentCompat {
                 preference_no_device.setVisible(true);
                 //preference_device_paired.setVisible(false);
                 preference_add_new_delete_devices.setVisible(false);
+
+                checkBondedDevice();
             }
         }
     };
 ////////////////////////////////////
+
+
 
 
 }
