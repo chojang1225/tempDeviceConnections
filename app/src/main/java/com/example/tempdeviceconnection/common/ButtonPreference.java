@@ -1,7 +1,10 @@
 package com.example.tempdeviceconnection.common;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.AttributeSet;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +37,10 @@ public class ButtonPreference extends Preference {
         super.onBindViewHolder(holder);
 
         holder.itemView.setOnClickListener(null);
-        holder.findViewById(R.id.add_new).setOnClickListener(view->performClick());
+        holder.findViewById(R.id.add_new_only).setOnClickListener(view->performClick());
+//        holder.findViewById(R.id.add_new_button).setOnClickListener(view->performClick());
+//        holder.findViewById(R.id.delete_devices_button).setOnClickListener(view->performClick());
+
     }
+
 }

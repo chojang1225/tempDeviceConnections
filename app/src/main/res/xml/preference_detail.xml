@@ -14,8 +14,8 @@
             android:key="no_devices"/>
 
         <com.example.tempdeviceconnection.common.ButtonPreference
-            android:layout="@layout/preference_add_new"
-            android:key="add_new"/>
+            android:layout="@layout/preference_add_new_only"
+            android:key="add_new_only"/>
     </androidx.preference.PreferenceCategory>
 
 <!--    <androidx.preference.PreferenceCategory-->

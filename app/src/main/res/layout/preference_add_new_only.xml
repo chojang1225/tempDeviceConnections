@@ -4,7 +4,7 @@
     android:layout_height="wrap_content">
 
     <Button
-        android:id="@+id/add_new"
+        android:id="@+id/add_new_only"
         android:text="@string/add_new"
         android:layout_width="273dp"
         android:layout_height="74dp"

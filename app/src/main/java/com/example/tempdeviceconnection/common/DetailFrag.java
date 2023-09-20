@@ -13,8 +13,12 @@ import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -42,6 +46,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
 
     private int pairedNumber;
 
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.preference_detail);
@@ -52,12 +57,20 @@ public class DetailFrag extends PreferenceFragmentCompat {
         IntentFilter intentFilter = new IntentFilter(ACTION_BOND_STATE_CHANGED);
         getActivity().registerReceiver(pairingReceiver, intentFilter);
 
-        ButtonPreference buttonPreference = findPreference("add_new");
-
+        // No Devices Paired 화면의 2줄짜리 텍스트
         Preference preference_no_device = findPreference("show_category");
-        //Preference preference_device_paired = findPreference("device_paired");
+        // No Device 화면에서 Add New 버튼
+        ButtonPreference buttonPreference_add_new_only = findPreference("add_new_only");
+
+        // 기기리스트 화면에서 Add New 버튼
+        ButtonPreference buttonPreference_add_new = findPreference("add_new_button");
+        // 기기리스트 화면에서 Delete Device(s) 버튼
+        ButtonPreference buttonPreference_delete_devices = findPreference("delete_devices_button");
+
+        // 기기리스트 화면에서 Add New + Delete Device(s) 버튼
         Preference preference_add_new_delete_devices = findPreference("addnew_delete");
 
+        // vehicle name 표시 및 저장
         EditTextPreference vehicleName = getPreferenceManager().findPreference("key_edit_text");
 
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
@@ -74,15 +87,15 @@ public class DetailFrag extends PreferenceFragmentCompat {
         pairedNumber = pairedDevices.size();
         Log.d("chojang", "size: " + pairedNumber);
 
+        checkBondedDevice();
+
         if (pairedDevices != null && !pairedDevices.isEmpty()) {
             preference_no_device.setVisible(false);
-            //preference_device_paired.setVisible(true);
             preference_add_new_delete_devices.setVisible(true);
 
 
         } else {
             preference_no_device.setVisible(true);
-            //preference_device_paired.setVisible(false);
             preference_add_new_delete_devices.setVisible(false);
         }
 
@@ -101,7 +114,6 @@ public class DetailFrag extends PreferenceFragmentCompat {
 //            }
 //        }
 
-        checkBondedDevice();
 
         vehicleName.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
             @Override
@@ -124,14 +136,22 @@ public class DetailFrag extends PreferenceFragmentCompat {
             return;
         }
 
-        buttonPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        buttonPreference_add_new_only.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Log.d("chojang", "Add New 버튼 클릭!!");
                 showAddNewDeviceDialog();
                 return true;
             }
         });
+
+//        buttonPreference_add_new.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+//            @Override
+//            public boolean onPreferenceClick(Preference preference) {
+//                showAddNewDeviceDialog();
+//                return true;
+//            }
+//        });
+
     }
 
     /////////////////////////////////////////////
@@ -146,6 +166,20 @@ public class DetailFrag extends PreferenceFragmentCompat {
         super.onPause();
 
     }
+
+
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//        View rootView = inflater.inflate(R.layout.preference_device_list, container, false);
+//
+//        // 사용자 정의 화면에서 TextView에 값을 설정합니다.
+//        TextView textView = rootView.findViewById(R.id.device_name_01);
+//        String preferenceValue = "갤럭시S8"; // Preference에서 가져온 값 또는 기본값
+//        textView.setText(preferenceValue);
+//
+//        return rootView;
+//    }
+
 
     private void showAddNewDeviceDialog() {
         Intent intent = new Intent(getActivity(), AddNewDeviceDialog.class);
@@ -171,7 +205,15 @@ public class DetailFrag extends PreferenceFragmentCompat {
 
         for (int i = 0; i < 2; i++) {
             Preference pref = findPreference("device_0" + i);
+
             if (pref != null) {
+                /////
+//                TextView textView = getView().findViewById(R.id.device_name_01);
+//                if(textView != null) {
+//                    textView.setText("갤럭시S8");
+//                }
+                /////
+
                 if (i < pairedNumber) {
                     pref.setVisible(true);
                 } else {
@@ -189,7 +231,6 @@ public class DetailFrag extends PreferenceFragmentCompat {
             String action = intent.getAction();
             Log.d("chojang", "action ----------> " + action);
             Preference preference_no_device = findPreference("show_category");
-            //Preference preference_device_paired = findPreference("device_paired");
             Preference preference_add_new_delete_devices = findPreference("addnew_delete");
 
             if (preference_no_device == null) {
@@ -201,7 +242,6 @@ public class DetailFrag extends PreferenceFragmentCompat {
                 Log.d("chojang", "paired successfully!!!");
 
                 preference_no_device.setVisible(false);
-                //preference_device_paired.setVisible(true);
                 preference_add_new_delete_devices.setVisible(true);
 
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
@@ -215,27 +255,23 @@ public class DetailFrag extends PreferenceFragmentCompat {
                     // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
+
+                checkBondedDevice();
+
                 String deviceName = device.getName();
 
                 if (deviceName != null) {
                     Log.d("chojang", "deviceName=" + deviceName);
-
-                    //PreferenceCategory preferenceCategory = findPreference("device_paired");
-
                     // TODO: 기기명 얻어와서 설정하기
 
 
-                    }
-
-
-                checkBondedDevice();
+                }
 
             } else if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)
                     && (intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.ERROR) == BluetoothDevice.BOND_NONE)) {
                 Log.d("chojang", "unpaired !!!");
 
                 preference_no_device.setVisible(true);
-                //preference_device_paired.setVisible(false);
                 preference_add_new_delete_devices.setVisible(false);
 
                 checkBondedDevice();
