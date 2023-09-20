@@ -38,8 +38,6 @@ public class ButtonPreference extends Preference {
 
         holder.itemView.setOnClickListener(null);
         holder.findViewById(R.id.add_new_only).setOnClickListener(view->performClick());
-//        holder.findViewById(R.id.add_new_button).setOnClickListener(view->performClick());
-//        holder.findViewById(R.id.delete_devices_button).setOnClickListener(view->performClick());
 
     }
 

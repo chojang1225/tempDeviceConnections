@@ -62,13 +62,8 @@ public class DetailFrag extends PreferenceFragmentCompat {
         // No Device 화면에서 Add New 버튼
         ButtonPreference buttonPreference_add_new_only = findPreference("add_new_only");
 
-        // 기기리스트 화면에서 Add New 버튼
-        ButtonPreference buttonPreference_add_new = findPreference("add_new_button");
-        // 기기리스트 화면에서 Delete Device(s) 버튼
-        ButtonPreference buttonPreference_delete_devices = findPreference("delete_devices_button");
-
         // 기기리스트 화면에서 Add New + Delete Device(s) 버튼
-        Preference preference_add_new_delete_devices = findPreference("addnew_delete");
+        TwoButtonPreference preference_add_new_delete_devices = (TwoButtonPreference) findPreference("addnew_delete");
 
         // vehicle name 표시 및 저장
         EditTextPreference vehicleName = getPreferenceManager().findPreference("key_edit_text");
@@ -99,21 +94,6 @@ public class DetailFrag extends PreferenceFragmentCompat {
             preference_add_new_delete_devices.setVisible(false);
         }
 
-        //PreferenceScreen preferenceScreen = this.getPreferenceScreen();
-        //PreferenceCategory preferenceCategory = new PreferenceCategory(preferenceScreen.getContext());
-
-//        for(int i=0; i<2; i++) {
-//            Preference pref = findPreference("device_0"+i);
-//            if(pref!=null) {
-//                if (i < pairedNumber) {
-//                    pref.setVisible(true);
-//                    //pref.setTitle(pairedDevices.toString());
-//                } else {
-//                    pref.setVisible(false);
-//                }
-//            }
-//        }
-
 
         vehicleName.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
             @Override
@@ -136,6 +116,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
             return;
         }
 
+        // No Device Paired 화면에서 Add New 버튼
         buttonPreference_add_new_only.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -144,13 +125,22 @@ public class DetailFrag extends PreferenceFragmentCompat {
             }
         });
 
-//        buttonPreference_add_new.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-//            @Override
-//            public boolean onPreferenceClick(Preference preference) {
-//                showAddNewDeviceDialog();
-//                return true;
-//            }
-//        });
+        // 기기리스트 화면에서 Add New 버튼
+        preference_add_new_delete_devices.setOnClickListenerAddNew(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddNewDeviceDialog();
+            }
+        });
+
+        // 기기리스트 화면에서 Delete Device(s) 버튼
+        preference_add_new_delete_devices.setOnClickListenerDeleteDevices(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "기기삭제 화면으로..", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
     }
 
@@ -223,7 +213,6 @@ public class DetailFrag extends PreferenceFragmentCompat {
         }
     }
 
-
     ////////////////////////////////////
     private class PairingReceiver extends BroadcastReceiver {
         @Override
@@ -231,7 +220,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
             String action = intent.getAction();
             Log.d("chojang", "action ----------> " + action);
             Preference preference_no_device = findPreference("show_category");
-            Preference preference_add_new_delete_devices = findPreference("addnew_delete");
+            TwoButtonPreference preference_add_new_delete_devices = findPreference("addnew_delete");
 
             if (preference_no_device == null) {
                 return;
@@ -279,8 +268,5 @@ public class DetailFrag extends PreferenceFragmentCompat {
         }
     };
 ////////////////////////////////////
-
-
-
 
 }

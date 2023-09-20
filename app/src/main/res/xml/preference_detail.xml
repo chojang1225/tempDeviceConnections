@@ -18,12 +18,6 @@
             android:key="add_new_only"/>
     </androidx.preference.PreferenceCategory>
 
-<!--    <androidx.preference.PreferenceCategory-->
-<!--        android:key="device_paired">-->
-<!--        <androidx.preference.Preference-->
-<!--            android:layout="@layout/preference_device_list"/>-->
-<!--    </androidx.preference.PreferenceCategory>-->
-
     <androidx.preference.Preference
         android:key="device_00"
         android:layout="@layout/preference_device_list"/>
@@ -31,10 +25,16 @@
         android:key="device_01"
         android:layout="@layout/preference_device_list"/>
 
-    <androidx.preference.PreferenceCategory
-        android:key="addnew_delete">
-        <androidx.preference.Preference
-            android:layout="@layout/preference_add_new_delete_devices"/>
+<!--    <androidx.preference.PreferenceCategory-->
+<!--        android:key="addnew_delete">-->
+<!--        <androidx.preference.Preference-->
+<!--            android:layout="@layout/preference_add_new_delete_devices"/>-->
+<!--    </androidx.preference.PreferenceCategory>-->
+
+    <androidx.preference.PreferenceCategory>
+        <com.example.tempdeviceconnection.common.TwoButtonPreference
+            android:layout="@layout/preference_add_new_delete_devices"
+            android:key="addnew_delete"/>
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
