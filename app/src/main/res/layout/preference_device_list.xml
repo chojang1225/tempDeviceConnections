@@ -40,82 +40,54 @@
             android:gravity="center_vertical" />
 
         <!-- HFP -->
-        <View
-            android:id="@+id/hfp_rectangle_01"
+        <Button
+            android:id="@+id/hfp_01"
             android:layout_width="86dp"
             android:layout_height="60dp"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="789dp"
             android:layout_alignParentTop="true"
             android:layout_marginTop="21dp"
-            android:background="@drawable/rectangle_1"
-            />
-
-        <TextView
-            android:id="@+id/hfp_01"
-            android:layout_width="56dp"
-            android:layout_height="36dp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="804dp"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="33dp"
             android:text="HFP"
+            android:textSize="18dp"
             android:textAppearance="@style/icon"
             android:gravity="center_vertical"
             android:textAlignment="center"
-            android:alpha="0.3"
+            android:background="@drawable/rectangle_1"
             />
 
         <!-- A2DP -->
-        <View
-            android:id="@+id/a2dp_rectangle_01"
+        <Button
+            android:id="@+id/a2dp_01"
             android:layout_width="86dp"
             android:layout_height="60dp"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="891dp"
             android:layout_alignParentTop="true"
             android:layout_marginTop="21dp"
-            android:background="@drawable/rectangle_1"
-            />
-        <TextView
-            android:id="@+id/a2dp_01"
-            android:layout_width="56dp"
-            android:layout_height="36dp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="906dp"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="33dp"
             android:text="A2DP"
+            android:textSize="15dp"
             android:textAppearance="@style/icon"
             android:gravity="center_vertical"
             android:textAlignment="center"
-            android:alpha="0.3"
+            android:background="@drawable/rectangle_1"
             />
 
         <!-- PP -->
-        <View
-            android:id="@+id/pp_rectangle_01"
+        <Button
+            android:id="@+id/pp_01"
             android:layout_width="86dp"
             android:layout_height="60dp"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="993dp"
             android:layout_alignParentTop="true"
             android:layout_marginTop="21dp"
-            android:background="@drawable/rectangle_1"
-            />
-        <TextView
-            android:id="@+id/pp_01"
-            android:layout_width="56dp"
-            android:layout_height="36dp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="1008dp"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="33dp"
             android:text="PP"
+            android:textSize="18dp"
             android:textAppearance="@style/icon"
             android:gravity="center_vertical"
             android:textAlignment="center"
-            android:alpha="0.3"
+            android:background="@drawable/rectangle_1"
             />
 
         <!-- Hamburger -->

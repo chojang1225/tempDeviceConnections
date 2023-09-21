@@ -46,7 +46,6 @@ public class DetailFrag extends PreferenceFragmentCompat {
 
     private int pairedNumber;
 
-
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.preference_detail);
@@ -63,11 +62,15 @@ public class DetailFrag extends PreferenceFragmentCompat {
         // No Device 화면에서 Add New 버튼
         ButtonPreference buttonPreference_add_new_only = findPreference("add_new_only");
 
-        // 기기리스트 화면에서 Add New + Delete Device(s) 버튼
+        // 기기리스트 화면에서 Add New / Delete Device(s) 버튼
         TwoButtonPreference preference_add_new_delete_devices = (TwoButtonPreference) findPreference("addnew_delete");
+
+        // 기기리스트 화면에서 HFP / A2DP / PP 버튼
+        ThreeButtonPreference preference_device_list = (ThreeButtonPreference) findPreference("device_00");
 
         // vehicle name 표시 및 저장
         EditTextPreference vehicleName = getPreferenceManager().findPreference("key_edit_text");
+
 
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -142,10 +145,29 @@ public class DetailFrag extends PreferenceFragmentCompat {
             }
         });
 
+        preference_device_list.setOnClickListenerHfp(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "HFP", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        preference_device_list.setOnClickListenerA2dp(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "A2DP", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        preference_device_list.setOnClickListenerPp(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "PP", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
-    /////////////////////////////////////////////
     @Override
     public void onResume() {
         super.onResume();
@@ -163,14 +185,13 @@ public class DetailFrag extends PreferenceFragmentCompat {
 //    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 //        View rootView = inflater.inflate(R.layout.preference_device_list, container, false);
 //
-//        // 사용자 정의 화면에서 TextView에 값을 설정합니다.
 //        TextView textView = rootView.findViewById(R.id.device_name_01);
 //        String preferenceValue = "갤럭시S8"; // Preference에서 가져온 값 또는 기본값
 //        textView.setText(preferenceValue);
 //
 //        return rootView;
 //    }
-
+//
 
     private void showAddNewDeviceDialog() {
         Intent intent = new Intent(getActivity(), AddNewDeviceDialog.class);
@@ -214,7 +235,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
         }
     }
 
-    ////////////////////////////////////
+
     private class PairingReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -254,6 +275,10 @@ public class DetailFrag extends PreferenceFragmentCompat {
                     Log.d("chojang", "deviceName=" + deviceName);
                     // TODO: 기기명 얻어와서 설정하기
 
+//                    TextView textView = findPreference("device_00").getView().findViewById(R.id.device_name_01);
+//                    if(textView != null) {
+//                        textView.setText("갤럭시S8");
+//                    }
 
                 }
 
@@ -263,7 +288,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
 
                 checkBondedDevice();
 
-                if(pairedNumber<1) {
+                if(pairedNumber < 1) {
                     preference_no_device.setVisible(true);
                     preference_add_new_delete_devices.setVisible(false);
                 }
@@ -271,6 +296,6 @@ public class DetailFrag extends PreferenceFragmentCompat {
             }
         }
     };
-////////////////////////////////////
+
 
 }
