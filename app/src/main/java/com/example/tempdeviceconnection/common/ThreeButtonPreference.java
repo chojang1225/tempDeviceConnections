@@ -53,9 +53,9 @@ public class ThreeButtonPreference extends Preference {
         super.onBindViewHolder(holder);
 
         holder.itemView.setOnClickListener(null);
-        holder.findViewById(R.id.hfp_01).setOnClickListener(hfp_button);
-        holder.findViewById(R.id.a2dp_01).setOnClickListener(a2dp_button);
-        holder.findViewById(R.id.pp_01).setOnClickListener(pp_button);
+        holder.findViewById(R.id.hfp_00).setOnClickListener(hfp_button);
+        holder.findViewById(R.id.a2dp_00).setOnClickListener(a2dp_button);
+        holder.findViewById(R.id.pp_00).setOnClickListener(pp_button);
     }
 
 
