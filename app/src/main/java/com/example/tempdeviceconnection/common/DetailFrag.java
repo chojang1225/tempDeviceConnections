@@ -215,7 +215,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
         pairedNumber = pairedDevices.size();
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 6; i++) {
             Preference pref = findPreference("device_0" + i);
 
             if (pref != null) {

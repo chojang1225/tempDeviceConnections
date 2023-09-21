@@ -26,7 +26,21 @@
         android:layout="@layout/preference_device_list"
         android:key="device_01"/>
 
+    <com.example.tempdeviceconnection.common.ThreeButtonPreference
+        android:layout="@layout/preference_device_list"
+        android:key="device_02"/>
 
+    <com.example.tempdeviceconnection.common.ThreeButtonPreference
+        android:layout="@layout/preference_device_list"
+        android:key="device_03"/>
+
+    <com.example.tempdeviceconnection.common.ThreeButtonPreference
+        android:layout="@layout/preference_device_list"
+        android:key="device_04"/>
+
+    <com.example.tempdeviceconnection.common.ThreeButtonPreference
+        android:layout="@layout/preference_device_list"
+        android:key="device_05"/>
 
 <!--    <androidx.preference.PreferenceCategory-->
 <!--        android:key="addnew_delete">-->
