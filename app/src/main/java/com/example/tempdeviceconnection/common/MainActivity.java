@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity implements OnListTiemSelecte
     }
 
 
-
     @Override
     public void onListItemSelected(int position) {
         DetailFrag df = (DetailFrag) getSupportFragmentManager().findFragmentById(R.id.detail);

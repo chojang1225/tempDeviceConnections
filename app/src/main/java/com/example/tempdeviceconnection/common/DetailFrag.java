@@ -7,32 +7,24 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceManager;
-import androidx.preference.PreferenceScreen;
 
 import com.example.tempdeviceconnection.R;
 import com.example.tempdeviceconnection.dialog.AddNewDeviceDialog;
 
-import org.w3c.dom.Text;
 
 import java.util.Set;
 
@@ -212,6 +204,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
         pairedNumber = pairedDevices.size();
 
@@ -219,20 +212,22 @@ public class DetailFrag extends PreferenceFragmentCompat {
             Preference pref = findPreference("device_0" + i);
 
             if (pref != null) {
-                /////
-//                TextView textView = getView().findViewById(R.id.device_name_01);
-//                if(textView != null) {
-//                    textView.setText("갤럭시S8");
-//                }
-                /////
-
                 if (i < pairedNumber) {
+                    ThreeButtonPreference preference_device_list = (ThreeButtonPreference) findPreference("device_0" + i);
+
+                    BluetoothDevice device = (BluetoothDevice) pairedDevices.toArray()[i];
+                    String currentDeviceName = device.getName();
+
+                    preference_device_list.setTitle(Integer.toString(i+1));
+                    preference_device_list.setSummary(currentDeviceName);
+
                     pref.setVisible(true);
                 } else {
                     pref.setVisible(false);
                 }
             }
         }
+
     }
 
 
