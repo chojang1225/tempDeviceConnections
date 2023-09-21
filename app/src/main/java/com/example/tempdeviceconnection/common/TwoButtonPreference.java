@@ -15,8 +15,6 @@ import com.example.tempdeviceconnection.R;
 
 
 
-
-
 public class TwoButtonPreference extends Preference {
 
     private View.OnClickListener add_new;

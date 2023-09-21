@@ -31,11 +31,11 @@
 <!--            android:layout="@layout/preference_add_new_delete_devices"/>-->
 <!--    </androidx.preference.PreferenceCategory>-->
 
-    <androidx.preference.PreferenceCategory>
-        <com.example.tempdeviceconnection.common.TwoButtonPreference
-            android:layout="@layout/preference_add_new_delete_devices"
-            android:key="addnew_delete"/>
-    </androidx.preference.PreferenceCategory>
+
+    <com.example.tempdeviceconnection.common.TwoButtonPreference
+        android:layout="@layout/preference_add_new_delete_devices"
+        android:key="addnew_delete"/>
+
 
     <androidx.preference.PreferenceCategory
         android:title="@string/bluetooth_system_info"

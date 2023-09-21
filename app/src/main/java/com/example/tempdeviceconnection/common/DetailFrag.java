@@ -59,6 +59,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
 
         // No Devices Paired 화면의 2줄짜리 텍스트
         Preference preference_no_device = findPreference("show_category");
+
         // No Device 화면에서 Add New 버튼
         ButtonPreference buttonPreference_add_new_only = findPreference("add_new_only");
 
@@ -84,7 +85,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
 
         checkBondedDevice();
 
-        if (pairedDevices != null && !pairedDevices.isEmpty()) {
+        if (pairedDevices != null && (pairedNumber > 0)) {
             preference_no_device.setVisible(false);
             preference_add_new_delete_devices.setVisible(true);
 
@@ -260,10 +261,13 @@ public class DetailFrag extends PreferenceFragmentCompat {
                     && (intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.ERROR) == BluetoothDevice.BOND_NONE)) {
                 Log.d("chojang", "unpaired !!!");
 
-                preference_no_device.setVisible(true);
-                preference_add_new_delete_devices.setVisible(false);
-
                 checkBondedDevice();
+
+                if(pairedNumber<1) {
+                    preference_no_device.setVisible(true);
+                    preference_add_new_delete_devices.setVisible(false);
+                }
+
             }
         }
     };
