@@ -121,6 +121,13 @@ public class DetailFrag extends PreferenceFragmentCompat {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
+            for (int i = 0; i < 6; i++) {
+                Preference pref = findPreference("device_0" + i);
+                if (pref != null) {
+                    pref.setVisible(false);
+                }
+            }
+            preference_add_new_delete_devices.setVisible(false);
             return;
         }
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();

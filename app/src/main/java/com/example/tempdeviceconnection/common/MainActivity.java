@@ -39,7 +39,8 @@ public class MainActivity extends AppCompatActivity implements OnListTiemSelecte
     private static final String SERVER_PACKAGE = "com.mobis.btconnectionservice";
     private static final String SERVER_ACTION = "com.mobis.action.btconnectionservice";
 
-    private static final int BLUETOOTH_PERMISSION_REQUEST = 1;
+    //private static final int BLUETOOTH_PERMISSION_REQUEST = 1;
+    //private static final int REQUEST_FINE_LOCATION_PERMISSION = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +51,7 @@ public class MainActivity extends AppCompatActivity implements OnListTiemSelecte
 
 //        String[] permissions = {
 //                android.Manifest.permission.BLUETOOTH,
-//                android.Manifest.permission.BLUETOOTH_ADMIN,
-//                android.Manifest.permission.ACCESS_FINE_LOCATION,
-//                android.Manifest.permission.ACCESS_COARSE_LOCATION
+//                android.Manifest.permission.BLUETOOTH_ADMIN
 //        };
 //
 //        for (String permission : permissions) {
@@ -61,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements OnListTiemSelecte
 //                return;
 //            }
 //        }
+
+//        checkLocationPermission();
 
         Intent intent = new Intent().setAction(SERVER_ACTION);
         intent.setPackage(SERVER_PACKAGE);
@@ -85,6 +86,25 @@ public class MainActivity extends AppCompatActivity implements OnListTiemSelecte
 //
 //            // 권한이 모두 허용되었을 때 실행해야 하는 코드
 //            // 예를 들어, Nearby devices와 관련된 기능을 실행할 수 있습니다.
+//        }
+//    }
+
+
+//
+//    private void checkLocationPermission() {
+//        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED) {
+//            // 위치 권한을 요청
+//            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION }, REQUEST_FINE_LOCATION_PERMISSION);
+//        }
+//    }
+//
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (requestCode == REQUEST_FINE_LOCATION_PERMISSION) {
+//            //
+//        } else {
+//            Toast.makeText(this, "Location permission is required to discover nearby devices", Toast.LENGTH_SHORT).show();
 //        }
 //    }
 
