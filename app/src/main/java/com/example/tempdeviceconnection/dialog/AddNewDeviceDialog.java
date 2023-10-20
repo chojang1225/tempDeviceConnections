@@ -114,6 +114,8 @@ public class AddNewDeviceDialog extends AppCompatActivity {
 
     private void dismiss() {
         if (!isFinishing()) {
+            Intent resultIntent = new Intent();
+            setResult(RESULT_CANCELED, resultIntent);
             finish();
         }
     }

@@ -1,14 +1,24 @@
 package com.example.tempdeviceconnection.common;
 
+//import static com.example.tempdeviceconnection.common.MainActivity.isAddNewClicked;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
+
 import android.Manifest;
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
@@ -16,16 +26,23 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import com.mobis.btconnectionservice.*;
 import com.example.tempdeviceconnection.R;
 import com.example.tempdeviceconnection.dialog.AddNewDeviceDialog;
+import com.mobis.btconnectionservice.*;
 
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Set;
 
 public class DetailFrag extends PreferenceFragmentCompat {
@@ -38,6 +55,32 @@ public class DetailFrag extends PreferenceFragmentCompat {
 
     private int pairedNumber;
 
+    private IBluetoothConnection connectionStatus;
+
+    public static boolean isAddNewClicked;
+    private static final String SERVER_PACKAGE = "com.mobis.btconnectionservice";
+    private static final String SERVER_ACTION = "com.mobis.action.btconnectionservice";
+
+    private boolean isBound = false;
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            Log.d("chojang", "onServiceConnected on fragment!  ");
+            connectionStatus = IBluetoothConnection.Stub.asInterface(iBinder);
+            isBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            Log.d("chojang", "onServiceDisconnected on fragment!  ");
+            connectionStatus = null;
+            isBound = false;
+        }
+    };
+
+
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.preference_detail);
@@ -48,6 +91,12 @@ public class DetailFrag extends PreferenceFragmentCompat {
         IntentFilter intentFilter = new IntentFilter(ACTION_BOND_STATE_CHANGED);
         getActivity().registerReceiver(pairingReceiver, intentFilter);
 
+        if(!isBound) {
+            Intent intent = new Intent().setAction(SERVER_ACTION);
+            intent.setPackage(SERVER_PACKAGE);
+            boolean result = getActivity().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+            Log.d("chojang", "result:   " + result);
+        }
         // No Devices Paired 화면의 2줄짜리 텍스트
         Preference preference_no_device = findPreference("show_category");
 
@@ -116,7 +165,14 @@ public class DetailFrag extends PreferenceFragmentCompat {
         buttonPreference_add_new_only.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
+                try {
+                    connectionStatus.onAddNewClicked();
+                    Log.d("chojang", "onAddNewClicked !!!");
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
                 showAddNewDeviceDialog();
+
                 return true;
             }
         });
@@ -163,33 +219,56 @@ public class DetailFrag extends PreferenceFragmentCompat {
     @Override
     public void onResume() {
         super.onResume();
-
     }
 
     @Override
     public void onPause() {
         super.onPause();
-
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (isBound) {
+            getActivity().unbindService(serviceConnection);
+        }
+    }
 
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        View rootView = inflater.inflate(R.layout.preference_device_list, container, false);
-//
-//        TextView textView = rootView.findViewById(R.id.device_name_01);
-//        String preferenceValue = "갤럭시S8"; // Preference에서 가져온 값 또는 기본값
-//        textView.setText(preferenceValue);
-//
-//        return rootView;
-//    }
-//
+    IBluetoothConnection mCallback = new IBluetoothConnection.Stub() {
+        @Override
+        public void onAddNewClicked() {}
+
+        @Override
+        public void onCancelClicked() {}
+
+    };
+
 
     private void showAddNewDeviceDialog() {
         Intent intent = new Intent(getActivity(), AddNewDeviceDialog.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        this.startActivity(intent);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //this.startActivity(intent);
+        launcher.launch(intent);
     }
+
+    private ActivityResultLauncher<Intent> launcher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_CANCELED) {
+                    try {
+                        connectionStatus.onCancelClicked();
+                        Log.d("chojang", "popup closed by cancel !!");
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else if (result.getResultCode() == Activity.RESULT_OK) {
+                    Log.d("chojang", "popup closed successfully !!");
+                }
+            }
+    );
+
+
+
 
     private void checkBondedDevice() {
 
@@ -270,11 +349,6 @@ public class DetailFrag extends PreferenceFragmentCompat {
                     Log.d("chojang", "deviceName=" + deviceName);
                     // TODO: 기기명 얻어와서 설정하기
 
-//                    TextView textView = findPreference("device_00").getView().findViewById(R.id.device_name_01);
-//                    if(textView != null) {
-//                        textView.setText("갤럭시S8");
-//                    }
-
                 }
 
             } else if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)
@@ -291,6 +365,5 @@ public class DetailFrag extends PreferenceFragmentCompat {
             }
         }
     };
-
 
 }

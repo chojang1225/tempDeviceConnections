@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
     <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED"
@@ -20,7 +22,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TempDeviceConnection"
-        tools:targetApi="31">
+        tools:targetApi="33">
         <activity
             android:name=".common.MainActivity"
             android:exported="true">
@@ -63,5 +65,10 @@
         </receiver>
 
     </application>
+
+    <queries>
+        <package android:name="com.mobis.btconnectionservice"/>
+    </queries>
+
 
 </manifest>
