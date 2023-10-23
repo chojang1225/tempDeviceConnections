@@ -39,29 +39,28 @@ public class MainActivity extends AppCompatActivity implements OnListTiemSelecte
     private static final String SERVER_PACKAGE = "com.mobis.btconnectionservice";
     private static final String SERVER_ACTION = "com.mobis.action.btconnectionservice";
 
-    //private static final int BLUETOOTH_PERMISSION_REQUEST = 1;
-    //private static final int REQUEST_FINE_LOCATION_PERMISSION = 1;
+    private static final int REQUEST_BLUETOOTH_PERMISSION = 1;
+    private BluetoothAdapter bluetoothAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment);
+
         Log.d("chojang", "onCreate");
 
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (bluetoothAdapter == null) {
+            // 기기가 블루투스를 지원하지 않는 경우
+            Toast.makeText(this, "이 기기는 블루투스를 지원하지 않습니다.", Toast.LENGTH_SHORT).show();
+            finish();
+        }
 
-//        String[] permissions = {
-//                android.Manifest.permission.BLUETOOTH,
-//                android.Manifest.permission.BLUETOOTH_ADMIN
-//        };
-//
-//        for (String permission : permissions) {
-//            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-//                ActivityCompat.requestPermissions(this, permissions, BLUETOOTH_PERMISSION_REQUEST);
-//                return;
-//            }
-//        }
+        if (!hasBluetoothPermission()) {
+            requestBluetoothPermission();
+        }
 
-//        checkLocationPermission();
+
 
         Intent intent = new Intent().setAction(SERVER_ACTION);
         intent.setPackage(SERVER_PACKAGE);
@@ -71,42 +70,42 @@ public class MainActivity extends AppCompatActivity implements OnListTiemSelecte
 
     }
 
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        if (requestCode == BLUETOOTH_PERMISSION_REQUEST) {
-//            for (int i = 0; i < permissions.length; i++) {
-//                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-//                    // 권한이 거부되었을 때 사용자에게 안내 메시지를 표시
-//                    Toast.makeText(this, "권한이 필요합니다.", Toast.LENGTH_SHORT).show();
-//                    finish(); // 앱 종료 또는 다른 조치를 취할 수 있음
-//                    return;
-//                }
-//            }
-//
-//            // 권한이 모두 허용되었을 때 실행해야 하는 코드
-//            // 예를 들어, Nearby devices와 관련된 기능을 실행할 수 있습니다.
-//        }
-//    }
+    private boolean hasBluetoothPermission() {
+        return (ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT)
+                == PackageManager.PERMISSION_GRANTED);
+    }
+
+    private void requestBluetoothPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.BLUETOOTH_CONNECT},
+                    REQUEST_BLUETOOTH_PERMISSION);
+        }
+    }
 
 
-//
-//    private void checkLocationPermission() {
-//        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED) {
-//            // 위치 권한을 요청
-//            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION }, REQUEST_FINE_LOCATION_PERMISSION);
-//        }
-//    }
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        if (requestCode == REQUEST_FINE_LOCATION_PERMISSION) {
-//            //
-//        } else {
-//            Toast.makeText(this, "Location permission is required to discover nearby devices", Toast.LENGTH_SHORT).show();
-//        }
-//    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_BLUETOOTH_PERMISSION) {
+
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                enableBluetooth();
+            } else {
+                // Do nothing
+            }
+        }
+    }
+
+
+    private void enableBluetooth() {
+        if (bluetoothAdapter != null) {
+            if (!bluetoothAdapter.isEnabled()) {
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBtIntent, 2);
+            }
+
+        }
+    }
 
 
     @Override
