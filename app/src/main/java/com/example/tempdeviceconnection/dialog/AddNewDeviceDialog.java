@@ -1,5 +1,6 @@
 package com.example.tempdeviceconnection.dialog;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -76,13 +77,14 @@ public class AddNewDeviceDialog extends AppCompatActivity {
         // to obtain vehicle name
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String editTextValue = sharedPreferences.getString("key_edit_text", "");
+        //String Passkey = sharedPreferences.getString("key_passkey_text", "");
 
         mDescription = (TextView) findViewById(R.id.add_new_device_text);
         mCancel = (Button) findViewById(R.id.add_new_device_cancel);
 
-        mDescription.setText(getResources().getString(R.string.pairing) + "\n" +
-                getResources().getString(R.string.vehicle_name) + editTextValue + "\n" +
-                getResources().getString(R.string.add_new_request));
+        mDescription.setText(getResources().getString(R.string.vehicle_name) + editTextValue + "\n" +
+                //  getResources().getString(R.string.pairing_key) + Passkey +  "\n" +
+                getResources().getString(R.string.add_new_notice));
         mCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,6 +93,7 @@ public class AddNewDeviceDialog extends AppCompatActivity {
         });
 
         activity = AddNewDeviceDialog.this;
+        activity.setTitle(R.string.add_new_device);
 
         mBluetoothAdapter = getSystemService(BluetoothManager.class).getAdapter();
         mAlwaysDiscoverable = new AlwaysDiscoverable(this, mBluetoothAdapter);

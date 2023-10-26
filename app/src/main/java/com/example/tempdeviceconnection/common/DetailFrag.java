@@ -63,6 +63,12 @@ public class DetailFrag extends PreferenceFragmentCompat {
 
     private boolean isBound = false;
 
+    private static final int btn_addnew = 1;
+    private static final int btn_cancel = 2;
+    private static final int btn_hfp = 3;
+    private static final int btn_a2dp = 4;
+    private static final int btn_pp = 5;
+
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -173,7 +179,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 try {
-                    connectionStatus.onAddNewClicked();
+                    connectionStatus.onClicked(1);
                     Log.d("chojang", "onAddNewClicked !!!");
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
@@ -243,10 +249,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
 
     IBluetoothConnection mCallback = new IBluetoothConnection.Stub() {
         @Override
-        public void onAddNewClicked() {}
-
-        @Override
-        public void onCancelClicked() {}
+        public void onClicked(int btn) {}
 
     };
 
@@ -263,7 +266,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
             result -> {
                 if (result.getResultCode() == Activity.RESULT_CANCELED) {
                     try {
-                        connectionStatus.onCancelClicked();
+                        connectionStatus.onClicked(2);
                         Log.d("chojang", "popup closed by cancel !!");
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
@@ -328,6 +331,14 @@ public class DetailFrag extends PreferenceFragmentCompat {
             if (preference_no_device == null) {
                 return;
             }
+
+
+//            if (BluetoothDevice.ACTION_PAIRING_REQUEST.equals(action)) {
+//                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+//
+//                Log.d("chojang", "pairing request is coming!!!");
+//            }
+
 
             if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)
                     && (intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.ERROR) == BluetoothDevice.BOND_BONDED)) {

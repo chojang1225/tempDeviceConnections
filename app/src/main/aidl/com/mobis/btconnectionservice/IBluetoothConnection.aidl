@@ -5,6 +5,5 @@ package com.mobis.btconnectionservice;
  */
 interface IBluetoothConnection {
     //void onSystemServiceReady();
-    void onAddNewClicked();
-    void onCancelClicked();
+    void onClicked(int btn);
 }

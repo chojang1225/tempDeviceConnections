@@ -19,11 +19,11 @@
     <string name="cancel">Cancel</string>
     <string name="pairing">Add New Device</string>
     <string name="pairing_device">Device Name:</string>
-    <string name="vehicle_name">Vehicle Name:</string>
+    <string name="vehicle_name">Device Name:</string>
     <string name="pairing_key">Passkey:</string>
     <string name="pairing_request">Please check that the Passkey has been entered correctly on the mobile device and then choose [Pair].</string>
     <string name="add_new_request">In the Bluetooth device, search for the Vehicle Name shown and pair.</string>
     <string name="delete_devices">Delete Device(s)</string>
-
+    <string name="add_new_notice">Waiting for Device Authentication... Please accept device pairing from your mobile phone.</string>
 
 </resources>

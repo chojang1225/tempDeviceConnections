@@ -1,5 +1,7 @@
 package com.example.tempdeviceconnection.dialog;
 
+import static com.example.tempdeviceconnection.dialog.AddNewDeviceDialog.activity;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -26,6 +28,7 @@ public class DeviceAuthenticationDialog extends AppCompatActivity {
     private TextView mDescription;
     private Button mCancel;
 
+    public static AppCompatActivity DeviceAuthenticationDialog_activity;
     private BluetoothDevice mDevice;
     private String mDeviceName;
     private int mKey;
@@ -38,7 +41,8 @@ public class DeviceAuthenticationDialog extends AppCompatActivity {
 
         mDescription = (TextView) findViewById(R.id.device_authentication_text);
         mCancel = (Button) findViewById(R.id.device_authentication_cancel);
-
+        DeviceAuthenticationDialog_activity = DeviceAuthenticationDialog.this;
+        DeviceAuthenticationDialog_activity.setTitle(R.string.add_new_device);
         mDevice = getIntent().getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
         if (mDevice != null) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
@@ -69,6 +73,7 @@ public class DeviceAuthenticationDialog extends AppCompatActivity {
                 dismiss();
             }
         });
+
         IntentFilter intentFilter = new IntentFilter(ACTION_PAIRING_CANCEL);
         intentFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
         registerReceiver(mReceiver, intentFilter);
@@ -94,7 +99,7 @@ public class DeviceAuthenticationDialog extends AppCompatActivity {
 
     private void dismissAddNewDeviceDialog() {
         // Finish AddNewDeviceDialog if it exists.
-        AddNewDeviceDialog dialog = (AddNewDeviceDialog) AddNewDeviceDialog.activity;
+        AddNewDeviceDialog dialog = (AddNewDeviceDialog) activity;
         if (dialog != null) {
             dialog.finish();
         }
