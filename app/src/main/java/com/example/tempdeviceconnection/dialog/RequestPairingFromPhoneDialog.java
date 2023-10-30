@@ -70,7 +70,7 @@ public class RequestPairingFromPhoneDialog extends AppCompatActivity {
                 }
                 mDevice.setPairingConfirmation(true);
                 // https://developer.android.com/reference/android/Manifest.permission#BLUETOOTH_PRIVILEGED
-                startActivity(getIntent().setClass(getBaseContext(), DeviceAuthenticationDialog.class));
+                //startActivity(getIntent().setClass(getBaseContext(), DeviceAuthenticationDialog.class));
                 dismiss();
             }
         });
