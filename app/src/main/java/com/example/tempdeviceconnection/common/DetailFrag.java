@@ -4,6 +4,7 @@ package com.example.tempdeviceconnection.common;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
+import static android.bluetooth.BluetoothDevice.ACTION_PAIRING_REQUEST;
 
 import android.Manifest;
 import android.app.Activity;
@@ -36,6 +37,7 @@ import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import com.example.tempdeviceconnection.dialog.RequestPairingFromPhoneDialog;
 import com.mobis.btconnectionservice.*;
 import com.example.tempdeviceconnection.R;
 import com.example.tempdeviceconnection.dialog.AddNewDeviceDialog;
@@ -332,11 +334,10 @@ public class DetailFrag extends PreferenceFragmentCompat {
                 return;
             }
 
-
-//            if (BluetoothDevice.ACTION_PAIRING_REQUEST.equals(action)) {
+//            if (ACTION_PAIRING_REQUEST.equals(action)) {
 //                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-//
-//                Log.d("chojang", "pairing request is coming!!!");
+//                Intent i = new Intent(getActivity(), RequestPairingFromPhoneDialog.class);
+//                launcher.launch(i);
 //            }
 
 

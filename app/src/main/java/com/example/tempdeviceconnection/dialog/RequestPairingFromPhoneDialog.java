@@ -1,14 +1,18 @@
 package com.example.tempdeviceconnection.dialog;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -48,11 +52,23 @@ public class RequestPairingFromPhoneDialog extends AppCompatActivity {
                 getResources().getString(R.string.pairing_device) + " " + mDeviceName + "\n" +
                 getResources().getString(R.string.pairing_key) + " " + mKey + "\n" +
                 getResources().getString(R.string.pairing_request));
+
+        Log.e("chojang", "[chojang] RequestPairingFromPhoneDialog");
         mPair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // KIMD: TODO - Need BLUETOOTH_PRIVILEGED permission
-                // mDevice.setPairingConfirmation(true);
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                mDevice.setPairingConfirmation(true);
                 // https://developer.android.com/reference/android/Manifest.permission#BLUETOOTH_PRIVILEGED
                 startActivity(getIntent().setClass(getBaseContext(), DeviceAuthenticationDialog.class));
                 dismiss();

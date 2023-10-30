@@ -51,7 +51,7 @@ public class PairingRequestReceiver extends BroadcastReceiver {
 
     private boolean shouldAceeptPairingImmediately() {
         // TODO: Check current condition of IVI
-        return true;
+        return false;
     }
 
     private boolean shouldRejectPairingImmediately() {
@@ -76,6 +76,7 @@ public class PairingRequestReceiver extends BroadcastReceiver {
 
         @Override
         public void handleMessage(Message msg) {
+            Log.e("chojang", "[chojang] onReceive: " + msg.what);
             switch (msg.what) {
                 case MSG_PROCESS_PAIRING_REQUEST:
                     if (shouldAceeptPairingImmediately()) {
