@@ -10,17 +10,22 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothHeadset;
 import android.bluetooth.BluetoothProfile;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.tempdeviceconnection.R;
+import com.mobis.btconnectionservice.IBluetoothConnection;
 
 public class DeviceAuthenticationDialog extends AppCompatActivity {
     private final String TAG = DeviceAuthenticationDialog.class.getName();
@@ -31,13 +36,27 @@ public class DeviceAuthenticationDialog extends AppCompatActivity {
     public static AppCompatActivity DeviceAuthenticationDialog_activity;
     private BluetoothDevice mDevice;
     private String mDeviceName;
+    private String mDeviceAddr;
     private int mKey;
     private boolean mReceiverRegistered = false;
+
+    private static final String SERVER_PACKAGE = "com.mobis.btconnectionservice";
+    private static final String SERVER_ACTION = "com.mobis.action.btconnectionservice";
+    private IBluetoothConnection connectionStatus;
+
+    private boolean isBound = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_authentication_dialog);
+
+        if(!isBound) {
+            Intent intent = new Intent().setAction(SERVER_ACTION);
+            intent.setPackage(SERVER_PACKAGE);
+            boolean result = getApplicationContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+            Log.d("chojang", "result 2:   " + result);
+        }
 
         mDescription = (TextView) findViewById(R.id.device_authentication_text);
         mCancel = (Button) findViewById(R.id.device_authentication_cancel);
@@ -56,10 +75,20 @@ public class DeviceAuthenticationDialog extends AppCompatActivity {
                 return;
             }
             mDeviceName = mDevice.getName();
+            mDeviceAddr = mDevice.getAddress();
+            Log.d("chojang", "mDeviceAddr: " + mDeviceAddr);
         } else {
             mDeviceName = "Phone Name"; // KIMD
         }
+
         mKey = getIntent().getIntExtra(BluetoothDevice.EXTRA_PAIRING_KEY, -1);
+//        try {
+//            mKey = connectionStatus.getPasskey(mDeviceAddr);
+//        } catch (RemoteException e) {
+//            throw new RuntimeException(e);
+//        }
+
+
         mDescription.setText(getResources().getString(R.string.pairing) + "\n" +
                 getResources().getString(R.string.pairing_device) + " " + mDeviceName + "\n" +
                 getResources().getString(R.string.pairing_key) + " " + mKey + "\n" +
@@ -94,12 +123,32 @@ public class DeviceAuthenticationDialog extends AppCompatActivity {
         dismissAddNewDeviceDialog();
     }
 
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            connectionStatus = IBluetoothConnection.Stub.asInterface(iBinder);
+            Log.d("chojang", "onServiceConnected2");
+            isBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            connectionStatus = null;
+            Log.d("chojang", "onServiceDisconnected2");
+            isBound = false;
+        }
+    };
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (mReceiverRegistered) {
             mReceiverRegistered = false;
             unregisterReceiver(mReceiver);
+        }
+        if (isBound) {
+            getApplicationContext().unbindService(serviceConnection);
         }
     }
 
@@ -116,6 +165,7 @@ public class DeviceAuthenticationDialog extends AppCompatActivity {
             dialog.finish();
         }
     }
+
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -151,5 +201,17 @@ public class DeviceAuthenticationDialog extends AppCompatActivity {
                 }
             }
         }
+    };
+
+    IBluetoothConnection mCallback = new IBluetoothConnection.Stub() {
+        @Override
+        public void onClicked(int btn) {}
+
+        @Override
+        public int getPasskey(String bdAddr) throws RemoteException {
+            return 0;
+        }
+
+
     };
 }

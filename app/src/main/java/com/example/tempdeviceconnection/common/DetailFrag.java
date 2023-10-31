@@ -253,6 +253,12 @@ public class DetailFrag extends PreferenceFragmentCompat {
         @Override
         public void onClicked(int btn) {}
 
+        @Override
+        public int getPasskey(String bdAddr) throws RemoteException {
+            return 0;
+        }
+
+
     };
 
 
