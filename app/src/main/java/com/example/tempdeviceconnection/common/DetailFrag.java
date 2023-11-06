@@ -41,7 +41,8 @@ import com.example.tempdeviceconnection.dialog.RequestPairingFromPhoneDialog;
 import com.mobis.btconnectionservice.*;
 import com.example.tempdeviceconnection.R;
 import com.example.tempdeviceconnection.dialog.AddNewDeviceDialog;
-import com.mobis.btconnectionservice.*;
+import com.mobis.btconnectionservice.IBluetoothConnectionAppCmd;
+import com.mobis.btconnectionservice.IBluetoothConnectionServiceCmd;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -57,7 +58,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
 
     private int pairedNumber;
 
-    private IBluetoothConnection connectionStatus;
+    private IBluetoothConnectionServiceCmd connectionStatus;
 
     public static boolean isAddNewClicked;
     private static final String SERVER_PACKAGE = "com.mobis.btconnectionservice";
@@ -65,17 +66,17 @@ public class DetailFrag extends PreferenceFragmentCompat {
 
     private boolean isBound = false;
 
+    private static final int btn_cancel = 0;
     private static final int btn_addnew = 1;
-    private static final int btn_cancel = 2;
-    private static final int btn_hfp = 3;
-    private static final int btn_a2dp = 4;
-    private static final int btn_pp = 5;
+    private static final int btn_hfp = 2;
+    private static final int btn_a2dp = 3;
+    private static final int btn_pp = 4;
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             Log.d("chojang", "onServiceConnected on fragment!  ");
-            connectionStatus = IBluetoothConnection.Stub.asInterface(iBinder);
+            connectionStatus = IBluetoothConnectionServiceCmd.Stub.asInterface(iBinder);
             isBound = true;
         }
 
@@ -181,7 +182,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 try {
-                    connectionStatus.onClicked(1);
+                    connectionStatus.setDiscoverableMode(1);
                     Log.d("chojang", "onAddNewClicked !!!");
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
@@ -249,15 +250,15 @@ public class DetailFrag extends PreferenceFragmentCompat {
         }
     }
 
-    IBluetoothConnection mCallback = new IBluetoothConnection.Stub() {
+    IBluetoothConnectionServiceCmd mCallback = new IBluetoothConnectionServiceCmd.Stub() {
         @Override
-        public void onClicked(int btn) {}
+        public void setDiscoverableMode(int btn) {}
 
         @Override
-        public int getPasskey(String bdAddr) throws RemoteException {
-            return 0;
-        }
+        public void registerCallback(IBluetoothConnectionAppCmd cb) {}
 
+        @Override
+        public void unregisterCallback(IBluetoothConnectionAppCmd cb) {}
 
     };
 
@@ -274,7 +275,7 @@ public class DetailFrag extends PreferenceFragmentCompat {
             result -> {
                 if (result.getResultCode() == Activity.RESULT_CANCELED) {
                     try {
-                        connectionStatus.onClicked(2);
+                        connectionStatus.setDiscoverableMode(0);
                         Log.d("chojang", "popup closed by cancel !!");
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);

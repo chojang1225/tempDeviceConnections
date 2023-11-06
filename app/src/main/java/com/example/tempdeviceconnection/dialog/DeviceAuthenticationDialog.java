@@ -25,7 +25,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.tempdeviceconnection.R;
-import com.mobis.btconnectionservice.IBluetoothConnection;
+import com.mobis.btconnectionservice.IBluetoothConnectionAppCmd;
+import com.mobis.btconnectionservice.IBluetoothConnectionServiceCmd;
 
 public class DeviceAuthenticationDialog extends AppCompatActivity {
     private final String TAG = DeviceAuthenticationDialog.class.getName();
@@ -42,7 +43,7 @@ public class DeviceAuthenticationDialog extends AppCompatActivity {
 
     private static final String SERVER_PACKAGE = "com.mobis.btconnectionservice";
     private static final String SERVER_ACTION = "com.mobis.action.btconnectionservice";
-    private IBluetoothConnection connectionStatus;
+    private IBluetoothConnectionServiceCmd connectionStatus;
 
     private boolean isBound = false;
 
@@ -126,7 +127,7 @@ public class DeviceAuthenticationDialog extends AppCompatActivity {
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            connectionStatus = IBluetoothConnection.Stub.asInterface(iBinder);
+            connectionStatus = IBluetoothConnectionServiceCmd.Stub.asInterface(iBinder);
             Log.d("chojang", "onServiceConnected2");
             isBound = true;
         }
@@ -203,13 +204,18 @@ public class DeviceAuthenticationDialog extends AppCompatActivity {
         }
     };
 
-    IBluetoothConnection mCallback = new IBluetoothConnection.Stub() {
+    IBluetoothConnectionServiceCmd mCallback = new IBluetoothConnectionServiceCmd.Stub() {
         @Override
-        public void onClicked(int btn) {}
+        public void setDiscoverableMode(int btn) {}
 
         @Override
-        public int getPasskey(String bdAddr) throws RemoteException {
-            return 0;
+        public void registerCallback(IBluetoothConnectionAppCmd cb) throws RemoteException {
+
+        }
+
+        @Override
+        public void unregisterCallback(IBluetoothConnectionAppCmd cb) throws RemoteException {
+
         }
 
 

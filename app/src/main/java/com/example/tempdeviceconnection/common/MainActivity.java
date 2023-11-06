@@ -27,13 +27,12 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.PreferenceScreen;
 
-import com.mobis.btconnectionservice.*;
+import com.mobis.btconnectionservice.IBluetoothConnectionAppCmd;
+import com.mobis.btconnectionservice.IBluetoothConnectionServiceCmd;
 import com.example.tempdeviceconnection.R;
 
 
 public class MainActivity extends AppCompatActivity implements OnListTiemSelectedListener {
-
-    private IBluetoothConnection connectionStatus;
 
     public static boolean isAddNewClicked;
     private static final String SERVER_PACKAGE = "com.mobis.btconnectionservice";
@@ -59,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements OnListTiemSelecte
         if (!hasBluetoothPermission()) {
             requestBluetoothPermission();
         }
-
 
 
         Intent intent = new Intent().setAction(SERVER_ACTION);
@@ -141,12 +139,19 @@ public class MainActivity extends AppCompatActivity implements OnListTiemSelecte
         DetailFrag df = (DetailFrag) getSupportFragmentManager().findFragmentById(R.id.detail);
     }
 
-    IBluetoothConnection mService;
+    private IBluetoothConnectionServiceCmd aidlServiceCmd = null;
+
     private ServiceConnection serviceConnection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            connectionStatus = IBluetoothConnection.Stub.asInterface(iBinder);
+            aidlServiceCmd = IBluetoothConnectionServiceCmd.Stub.asInterface(iBinder);
+
+            try {
+                aidlServiceCmd.registerCallback(aidlAppCmd);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
 
             Log.d("chojang", "onServiceConnected!  ");
         }
@@ -155,7 +160,17 @@ public class MainActivity extends AppCompatActivity implements OnListTiemSelecte
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
             Log.d("chojang", "onServiceDisconnected!  ");
-            connectionStatus = null;
+            aidlServiceCmd = null;
+        }
+    };
+
+    public IBluetoothConnectionAppCmd.Stub aidlAppCmd = new IBluetoothConnectionAppCmd.Stub() {
+
+        @Override
+        public void onPasskeyConfirmRequested(String address, String devname, int passkey) throws RemoteException {
+            Log.d("chojang", "address:  "+ address);
+            Log.d("chojang", "devname:  "+ devname);
+            Log.d("chojang", "passkey:  "+ passkey);
         }
     };
 
